@@ -20,7 +20,7 @@ Which just pretty-prints the result of the parse.
 
 To use as a library:
 
-```
+```python
 def parse_string(string: String) -> Specification
 def parse_stdin() -> Specification
 ```
@@ -49,15 +49,15 @@ class Interface:
 ```
 
 ```python
-class EnumEntry:
-  name: Name
-  value: string
-  summary: string | None
-
 class Enum:
   name: Name
   description: Description | None
   entries: List[EnumEntry]
+
+class EnumEntry:
+  name: Name
+  value: string
+  summary: string | None
 ```
 
 ```python
@@ -74,10 +74,11 @@ class Request:
   is_destructor: Boolean
   args: ArgList
 
-class ArgList::
+class ArgList:
   def return_type() -> Arg | None
   def parameters() -> List[Arg]
 
+```python
 class Arg:
   name: Name
   type: wayland_type
@@ -88,7 +89,7 @@ class Arg:
 type wayland_type = "uint" | "int" | "fixed" | "string" | "object" | "array" | "fd"
 ```
 
-If the arg's type is `object` or `new_id`, then `interface` may contain a `string` with the name of the interface.
+If the arg's type is `object` or `new_id`, then `interface` may contain the name of the interface - otherwise, it refers to the generic `struct wl_interface`.
 
 ```python
 class Description:
@@ -114,13 +115,13 @@ class Name:
 
 ## Errors
 
-```
+```python
 class ScannerError
 ```
 
 Raised when the parser hits an unknown item in the tree (i.e. the XML file is not valid).
 
-```
+```python
 class UnknownTypeError
 ```
 
