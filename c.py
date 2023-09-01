@@ -149,7 +149,7 @@ def get_request_interface(interface, request):
     for a in request.args.args:
         if a and a.is_interface():
             if a.interface:
-                return '&' + (a.interface + "interface").snake()
+                return "&" + (a.interface + "interface").snake()
             else:
                 return "interface"
 

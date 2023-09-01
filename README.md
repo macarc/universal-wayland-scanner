@@ -29,7 +29,6 @@ def parse_stdin() -> Specification
 
 You can then write code that deals with these classes, instead of XML. An example is given in `c.py`.
 
-
 ## Classes
 
 ```python
@@ -77,6 +76,7 @@ class Request:
 class ArgList:
   def return_type() -> Arg | None
   def parameters() -> List[Arg]
+```
 
 ```python
 class Arg:
@@ -96,6 +96,7 @@ class Description:
   text: string
   summary: string | None
 ```
+
 ```python
 class Name:
   # snake_case
@@ -126,4 +127,3 @@ class UnknownTypeError
 ```
 
 Raised when an argument to a request or event is not a valid (known) type (i.e. is not a `wayland_type` as defined below).
-
