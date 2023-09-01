@@ -1,6 +1,10 @@
 # Documentation
 
-Universal Wayland Scanner aims to provide an easy-to-use interface for generating Wayland bindings for many languages.
+Universal Wayland Scanner aims to provide an easy-to-use interface for generating Wayland bindings (ala `wayland-scanner`) for many languages.
+
+## Status
+
+Still very much experimental. Doesn't process version data yet.
 
 ## Usage
 
@@ -17,63 +21,95 @@ Which just pretty-prints the result of the parse.
 To use as a library:
 
 ```
-def parse_string(string: String) -> WaylandSpecification
-def parse_stdin() -> WaylandSpecification
+def parse_string(string: String) -> Specification
+def parse_stdin() -> Specification
 ```
 
 `parse_stdin()` is a convenience method over `parse_string(string)`.
 
+You can then write code that deals with these classes, instead of XML. An example is given in `c.py`.
+
 
 ## Classes
 
-```
-class WaylandSpecification:
-  name: string
+```python
+class Specification:
+  name: Name
   copyright: string | None
-  interfaces: List[WaylandInterface]
+  interfaces: List[Interface]
 ```
 
-```
-class WaylandInterface:
-  name: string
-  description: string | None
-  enums: List[WaylandEnum]
-  events: List[WaylandEvent]
-  requests: List[WaylandRequest]
+```python
+class Interface:
+  name: Name
+  description: Description | None
+  enums: List[Enum]
+  events: List[Event]
+  requests: List[Request]
 ```
 
-```
-class WaylandEnumEntry:
-  name: string
+```python
+class EnumEntry:
+  name: Name
   value: string
   summary: string | None
 
-class WaylandEnum:
-  name: string
-  description: string | None
-  entries: List[WaylandEnumEntry]
+class Enum:
+  name: Name
+  description: Description | None
+  entries: List[EnumEntry]
 ```
 
-```
-class WaylandEvent:
-  name: string
-  description: string | None
-  args: List[WaylandArg]
+```python
+class Event:
+  name: Name
+  description: Description | None
+  args: List[Arg]
 ```
 
-```
-class WaylandRequest:
-  name: string
-  description: string | None
-  args: List[WaylandArg]
-```
-```
-class WaylandArg:
-  name: string
+```python
+class Request:
+  name: Name
+  description: Description | None
+  is_destructor: Boolean
+  args: ArgList
+
+class ArgList::
+  def return_type() -> Arg | None
+  def parameters() -> List[Arg]
+
+class Arg:
+  name: Name
   type: wayland_type
+  interface: Name | None
+  nullable: Boolean
   summary: string | None
 
 type wayland_type = "uint" | "int" | "fixed" | "string" | "object" | "array" | "fd"
+```
+
+If the arg's type is `object` or `new_id`, then `interface` may contain a `string` with the name of the interface.
+
+```python
+class Description:
+  text: string
+  summary: string | None
+```
+```python
+class Name:
+  # snake_case
+  def snake() -> string
+  # SCREAMING_CASE
+  def screaming() -> string
+  # PascalCase
+  def pascal() -> string
+  # camelCase
+  def camel() -> string
+  # text case
+  def text() -> string
+  # name1 + name2 adds a separator between the names
+  # (e.g. a _ when accessed with .snake())
+  def __add__(other: Name | string) -> Name
 ```
 
 ## Errors
