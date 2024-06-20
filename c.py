@@ -16,14 +16,10 @@ class CDefine:
             print(f"#endif /* {self.name.snake()} */")
 
 
-def print_comment_block_line(text, indent=""):
-    print(indent + "  * " + text)
-
-
 def print_comment_block(text, indent=""):
     print(indent + "/**")
-    print("  * " + (indent + "  * ").join(text.splitlines(True)))
-    print(indent + "  */")
+    print(indent + " * " + ("\n" + indent + " * ").join(text.strip().splitlines()))
+    print(indent + " */")
 
 
 def print_short_comment(text, indent=""):
